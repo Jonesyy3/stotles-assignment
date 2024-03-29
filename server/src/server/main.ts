@@ -47,14 +47,14 @@ type RecordSearchFilters = {
 /**
  * Queries the database for procurement records according to the search filters.
  */
-async function searchRecords(
+async function searchRecordsTitleAndDescriptions(
   { textSearch }: RecordSearchFilters,
   offset: number,
   limit: number
 ): Promise<ProcurementRecord[]> {
   if (textSearch) {
     return await sequelize.query(
-      "SELECT * FROM procurement_records WHERE title LIKE :textSearch LIMIT :limit OFFSET :offset",
+      "SELECT * FROM procurement_records WHERE title LIKE :textSearch OR description LIKE :textSearch LIMIT :limit OFFSET :offset",
       {
         model: ProcurementRecord, // by setting this sequelize will return a list of ProcurementRecord objects
         replacements: {
@@ -102,6 +102,11 @@ function serializeProcurementRecord(
       id: buyer.id,
       name: buyer.name,
     },
+    currency: record.currency,
+    value: record.value,
+    stage: record.stage,
+    close_date: record.close_date,
+    award_date: record.award_date
   };
 }
 
@@ -141,6 +146,7 @@ async function serializeProcurementRecords(
 app.post("/api/records", async (req, res) => {
   const requestPayload = req.body as RecordSearchRequest;
 
+  console.log("request:", req.body)
   const { limit, offset } = requestPayload;
 
   if (limit === 0 || limit > 100) {
@@ -152,9 +158,9 @@ app.post("/api/records", async (req, res) => {
   // If number of returned records is larger than
   // the requested limit it means there is more data than requested
   // and the client can fetch the next page.
-  const records = await searchRecords(
+  const records = await searchRecordsTitleAndDescriptions(
     {
-      textSearch: requestPayload.textSearch,
+      textSearch: `%${requestPayload.textSearch}%`,
     },
     offset,
     limit + 1
@@ -167,6 +173,7 @@ app.post("/api/records", async (req, res) => {
     endOfResults: records.length <= limit, // in this case we've reached the end of results
   };
 
+  console.log()
   res.json(response);
 });
 

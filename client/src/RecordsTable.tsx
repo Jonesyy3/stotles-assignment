@@ -14,6 +14,7 @@ function RecordsTable(props: Props) {
     ProcurementRecord | undefined
   >();
 
+  console.log(records)
   const columns = React.useMemo<ColumnType<ProcurementRecord>[]>(() => {
     return [
       {
@@ -39,6 +40,24 @@ function RecordsTable(props: Props) {
         title: "Buyer name",
         render: (record: ProcurementRecord) => record.buyer.name,
       },
+      {
+        title: "Value",
+        render: (record: ProcurementRecord) => {
+          return record.value && record.currency 
+              ? `${record.value} ${record.currency}` 
+              : 'N/a'
+        }
+      },
+      {
+        title: 'Stage',
+        render: (record: ProcurementRecord) => {
+          return record.stage === 'CONTRACT' 
+              ? `Awarded on ${record.award_date}`
+              : new Date(record.close_date) > new Date() || record.close_date === null
+                    ? `Open until ${record.close_date}`
+                    : 'Closed'
+        }
+      }
     ];
   }, []);
   return (
