@@ -1,8 +1,10 @@
-import { Input } from "antd";
 import React from "react";
+import BuyerFilter from "./filterElements/BuyerFilter";
+import TextFilter from "./filterElements/TextFilter";
 
 export type SearchFilters = {
   query: string;
+  buyer: string;
 };
 
 type Props = {
@@ -23,13 +25,20 @@ function RecordSearchFilters(props: Props) {
     [onChange, filters]
   );
 
+  const handleBuyerChange = React.useCallback(
+    (e: string) => {
+      onChange({
+        ...filters,
+        buyer: e,
+      });
+    },
+    [onChange, filters]
+  );
+
   return (
     <div>
-      <Input
-        placeholder="Search text..."
-        value={filters.query}
-        onChange={handleQueryChange}
-      />
+      <TextFilter onChange={handleQueryChange} filters={filters} />
+      <BuyerFilter onChange={handleBuyerChange} />
     </div>
   );
 }
