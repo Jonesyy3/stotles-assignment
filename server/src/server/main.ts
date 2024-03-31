@@ -46,7 +46,7 @@ type RecordSearchFilters = {
 };
 
 /**
- * 
+ * Queries the database for all buyers.
  */
 async function getBuyers(): Promise<Buyer[]> {
   return await sequelize.query("SELECT * FROM buyers", 
@@ -208,23 +208,6 @@ app.listen(app.get("port"), () => {
   console.log("  App is running at http://localhost:%d", app.get("port"));
   console.log("  Press CTRL-C to stop\n");
 });
-
-
-// export type ProcurementRecordAndBuyer = {
-//   id: string;
-//   title: string;
-//   description: string;
-//   publishDate: string;
-//   buyer: {
-//     id: string;
-//     name: string;
-//   };
-//   currency: string;
-//   value: string;
-//   stage: string;
-//   close_date: string;
-//   award_date: string;
-// }
 
 export enum Stages {
   "TENDER" = "TENDER",

@@ -37,7 +37,7 @@ function RecordSearchFilters(props: Props) {
 
   return (
     <div>
-      <TextFilter onChange={handleQueryChange} filters={filters} />
+      <TextFilter onChange={handleQueryChange} query={filters.query} />
       <BuyerFilter onChange={handleBuyerChange} />
     </div>
   );

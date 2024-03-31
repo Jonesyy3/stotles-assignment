@@ -12,8 +12,8 @@ const BuyerFilter = (props: Props) => {
     const { Option } = Select;
 
     const [buyers, setBuyers] = useState<Buyer[]>(
-        [{id: "0", name: 'Any buyer', country: null}]
-        );
+      [{id: "0", name: 'Any buyer', country: null}]
+    );
 
     /**
      * Some thoughts on how to make this more performant if it was used in production
@@ -35,7 +35,7 @@ const BuyerFilter = (props: Props) => {
       }, []);
 
     return(
-        <Select defaultValue="Any buyer" style={{ width: 200 }} onChange={onChange}>
+        <Select defaultValue="Any buyer" style={{ width: 400 }} onChange={onChange}>
         {buyers.map((buyer) => (
           <Option key={buyer.id} value={buyer.name === 'Any buyer' ? '%' : buyer.name}>
             {buyer.name}

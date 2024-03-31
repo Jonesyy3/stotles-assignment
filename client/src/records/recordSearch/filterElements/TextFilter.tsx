@@ -4,16 +4,16 @@ import { SearchFilters } from "../RecordSearchFilters";
 
 type Props = {
     onChange: (text: React.FormEvent<HTMLInputElement>) => void;
-    filters: SearchFilters
+    query: string
   };
 
 const TextFilter = (props: Props) => {
-    const { onChange, filters } = props;
+    const { onChange, query } = props;
 
     return (   
         <Input
         placeholder="Search text..."
-        value={filters.query}
+        value={query}
         onChange={onChange}
         />
     )
