@@ -1,5 +1,6 @@
 export type RecordSearchRequest = {
   textSearch?: string;
+  buyerSearch?: string
   offset: number;
   limit: number;
 };
@@ -7,6 +8,7 @@ export type RecordSearchRequest = {
 export type BuyerDto = {
   id: string;
   name: string;
+  country: string;
 };
 
 export type ProcurementRecordDto = {
@@ -15,6 +17,11 @@ export type ProcurementRecordDto = {
   description: string;
   buyer: BuyerDto;
   publishDate: string;
+  currency: string;
+  value: number;
+  stage: string;
+  close_date: string;
+  award_date: string;
 };
 
 export type RecordSearchResponse = {

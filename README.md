@@ -1,5 +1,17 @@
 # Stotles work sample assignment
 
+Some considerations for potential future enhancements to the search feature, some of these might only be applicable with more data - to get a more precise record search:
+    - Filter Open/Closed procurements (maybe also a date range filter)
+    - Filter for only Tender/Contracts
+    - Filter on the value of a contract/tender (greater than x, less than y etc)
+    - A sort by feature (next to each column to ascend decend in order)
+    - The buyer.country is not currently used at all or have any purpose currently, so this could maybe also be used to display if some organisations can only sell to some countries (again i'm not sure on the whole use case)
+
+    - Slightly different, but depending on the use case... If being used by companies to find
+        what organisation bought what contract. Then maybe some extra data on the contract for relevant field e.g. agriculture, housing, commerical.
+        This could also then be used if no results for your search (or additional) a few records below for 'you might be interested in...'
+
+
 ## Getting started
 
 This sample codebase consists of a separate client & server code.

@@ -42,23 +42,35 @@ app.use(express.json());
 
 type RecordSearchFilters = {
   textSearch?: string;
+  buyerSearch?: string;
 };
+
+/**
+ * Queries the database for all buyers.
+ */
+async function getBuyers(): Promise<Buyer[]> {
+  return await sequelize.query("SELECT * FROM buyers", 
+  {
+    model: Buyer
+  })
+}
 
 /**
  * Queries the database for procurement records according to the search filters.
  */
 async function searchRecords(
-  { textSearch }: RecordSearchFilters,
+  { textSearch, buyerSearch }: RecordSearchFilters,
   offset: number,
   limit: number
 ): Promise<ProcurementRecord[]> {
   if (textSearch) {
     return await sequelize.query(
-      "SELECT * FROM procurement_records WHERE title LIKE :textSearch LIMIT :limit OFFSET :offset",
+      "SELECT p.* FROM procurement_records p, buyers b WHERE (p.title LIKE :textSearch OR p.description LIKE :textSearch ) AND b.id = p.buyer_id AND b.name LIKE :buyerSearch LIMIT :limit OFFSET :offset",
       {
         model: ProcurementRecord, // by setting this sequelize will return a list of ProcurementRecord objects
         replacements: {
           textSearch: `${textSearch}%`,
+          buyerSearch: buyerSearch,
           offset: offset,
           limit: limit,
         },
@@ -75,6 +87,14 @@ async function searchRecords(
         },
       }
     );
+  }
+}
+
+const serializeBuyer = (buyer: Buyer) => {
+  return {
+    id: buyer.id,
+    name: buyer.name,
+    country: buyer.country
   }
 }
 
@@ -101,7 +121,13 @@ function serializeProcurementRecord(
     buyer: {
       id: buyer.id,
       name: buyer.name,
+      country: buyer.country
     },
+    currency: record.currency,
+    value: record.value,
+    stage: record.stage,
+    close_date: record.close_date,
+    award_date: record.award_date
   };
 }
 
@@ -134,6 +160,13 @@ async function serializeProcurementRecords(
   return records.map((r) => serializeProcurementRecord(r, buyersById));
 }
 
+app.get("/api/getBuyers", async(req, res) => {
+  const buyers = await getBuyers();
+
+  buyers.map((b) => serializeBuyer(b));
+  res.json(buyers)
+})
+
 /**
  * This endpoint implements basic way to paginate through the search results.
  * It returns a `endOfResults` flag which is true when there are no more records to fetch.
@@ -154,7 +187,8 @@ app.post("/api/records", async (req, res) => {
   // and the client can fetch the next page.
   const records = await searchRecords(
     {
-      textSearch: requestPayload.textSearch,
+      textSearch: `%${requestPayload.textSearch}%`,
+      buyerSearch: requestPayload.buyerSearch
     },
     offset,
     limit + 1
@@ -174,3 +208,8 @@ app.listen(app.get("port"), () => {
   console.log("  App is running at http://localhost:%d", app.get("port"));
   console.log("  Press CTRL-C to stop\n");
 });
+
+export enum Stages {
+  "TENDER" = "TENDER",
+  "CONTRACT" = "CONTRACT"
+}
