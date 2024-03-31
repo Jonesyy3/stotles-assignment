@@ -39,7 +39,6 @@ function RecordSearchPage() {
         offset: PAGE_SIZE * (page - 1),
       });
 
-      console.log('response', response)
       if (page === 1) {
         setRecords(response.records);
       } else {
