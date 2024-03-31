@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import React from "react";
-import { ProcurementRecord } from "../api/Api";
+import { ProcurementRecord } from "./Api";
 
 type Props = {
   record?: ProcurementRecord;

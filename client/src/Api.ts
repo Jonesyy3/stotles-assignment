@@ -1,6 +1,5 @@
 export type SearchRecordsRequest = {
   textSearch?: string;
-  buyerSearch: string;
   limit: number;
   offset: number;
 };
@@ -21,12 +20,6 @@ export type ProcurementRecord = {
   award_date: string;
 };
 
-export type Buyer = {
-  id: string;
-  name: string;
-  country: string;
-}
-
 export type SearchRecordsResponse = {
   records: ProcurementRecord[];
   endOfResults: boolean;
@@ -43,16 +36,6 @@ class Api {
       },
       body: JSON.stringify(request),
     });
-    return await response.json();
-  }
-
-  async getBuyers(): Promise<Buyer[]> {
-    const response = await fetch("/api/getBuyers", {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
     return await response.json();
   }
 }

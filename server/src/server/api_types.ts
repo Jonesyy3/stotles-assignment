@@ -1,6 +1,5 @@
 export type RecordSearchRequest = {
   textSearch?: string;
-  buyerSearch?: string
   offset: number;
   limit: number;
 };
@@ -8,7 +7,6 @@ export type RecordSearchRequest = {
 export type BuyerDto = {
   id: string;
   name: string;
-  country: string;
 };
 
 export type ProcurementRecordDto = {

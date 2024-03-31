@@ -7,7 +7,4 @@ export class Buyer extends Model {
 
   @Column
   name!: string;
-
-  @Column
-  country!: string
 }

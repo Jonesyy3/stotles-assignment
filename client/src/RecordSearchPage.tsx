@@ -1,8 +1,8 @@
 import { Button } from "antd";
 import React from "react";
-import Api, { ProcurementRecord } from "../../api/Api";
+import Api, { ProcurementRecord } from "./Api";
 import RecordSearchFilters, { SearchFilters } from "./RecordSearchFilters";
-import RecordsTable from "../RecordsTable";
+import RecordsTable from "./RecordsTable";
 
 /**
  * This component implements very basic pagination.
@@ -22,7 +22,6 @@ function RecordSearchPage() {
   const [page, setPage] = React.useState<number>(1);
   const [searchFilters, setSearchFilters] = React.useState<SearchFilters>({
     query: "",
-    buyer: '%'
   });
 
   const [records, setRecords] = React.useState<
@@ -36,11 +35,11 @@ function RecordSearchPage() {
       const api = new Api();
       const response = await api.searchRecords({
         textSearch: searchFilters.query,
-        buyerSearch: searchFilters.buyer,
         limit: PAGE_SIZE,
         offset: PAGE_SIZE * (page - 1),
       });
 
+      console.log('response', response)
       if (page === 1) {
         setRecords(response.records);
       } else {
